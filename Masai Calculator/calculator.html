@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Masai Calculator</title>
+    <style>
+        h1 {
+            color: darkcyan;
+            text-align: center;
+            font-size: 45px;
+        }
+
+        #Grandparent {
+            width: 25%;
+            height: auto;
+            margin: auto;
+            border-radius: 10px;
+            padding-top: 10px;
+            padding-bottom: 50px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+        .parent {
+            width: 75%;
+            height: 70px; 
+            margin: auto;
+            margin-top: 15px; 
+            border-radius: 10px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+        #child {
+            width: 75%;
+            height: auto;
+            margin: auto;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 8px;
+        }
+
+        #child > div {
+            border-radius: 10px;
+            font-size: 24px;
+            padding: 20px; 
+            text-align: center;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            cursor: pointer;
+        }
+
+        #display {
+            text-align: right;
+            font-size: 24px;
+            padding: 10px;
+            border: 1px solid #000;
+            margin: 0 8px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Masai Calculator</h1>
+    <div id="Grandparent">
+        <div id="display">0</div>
+        <div id="child">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div style="color: white; background-color: black;">+</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div style="color: white; background-color: black;">-</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div style="color: white; background-color: black;">x</div>
+            <div style="color: white; background-color: red;">C</div>
+            <div>0</div>
+            <div style="color: white; background-color: black;">=</div>
+            <div style="color: white; background-color: black;">/</div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById("display");
+        let secondnumber = "";
+        let operator = "";
+        let firstnumber = null;
+
+        clearDisplay = () => {
+            display.innerText = "0";
+        };
+
+        OnNumberClick = (number) => {
+            if (secondnumber == "0") {
+                secondnumber = number;
+            } else {
+                secondnumber += number;
+            }
+            display.innerText = secondnumber;
+        };
+
+        OperatorClick = (op) => {
+            if (operator == "") {
+                firstnumber = secondnumber;
+                operator = op;
+                secondnumber = "";
+            }
+        };
+
+        calculateResult = () => {
+            if (operator !== "" && secondnumber !== "") {
+                let result;
+                switch (operator) {
+                    case "+":
+                        result = (Number(firstnumber) + Number(secondnumber)).toString();
+                        break;
+                    case "-":
+                        result = (Number(firstnumber) - Number(secondnumber)).toString();
+                        break;
+                    case "x":
+                        result = (Number(firstnumber) * Number(secondnumber)).toString();
+                        break;
+                    case "/":
+                        result = (Number(firstnumber) / Number(secondnumber)).toString();
+                        break;
+                    default:
+                        break;
+                }
+                display.innerText = result;
+                firstnumber = result;
+                operator = "";
+                secondnumber = "";
+            }
+        };
+
+        OnButtonClick = (value) => {
+            if (value >= "0" && value <= "9") {
+                OnNumberClick(value);
+            } else if (value == "+" || value == "-" || value == "x" || value == "/") {
+                OperatorClick(value);
+            } else if (value == "=") {
+                calculateResult();
+            } else if (value == "C") {
+                clearDisplay();
+            }
+        };
+
+        document.querySelectorAll("#child > div").forEach((button) => {
+            button.addEventListener("click", () => {
+                OnButtonClick(button.innerText);
+            });
+        });
+    </script>
+</body>
+</html>
+
